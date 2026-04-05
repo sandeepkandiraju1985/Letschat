@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  MUTED
+  BANNED
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWED
+  CLOSED
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String?    @unique
+  passwordHash String?
+  displayName  String
+  avatarUrl    String?
+  isGuest      Boolean    @default(false)
+  role         UserRole   @default(USER)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  roomMessages           Message[]
+  sentDirectMessages     DirectMessage[] @relation("DirectMessageSender")
+  receivedDirectMessages DirectMessage[] @relation("DirectMessageReceiver")
+
+  createdRooms Room[] @relation("RoomCreator")
+
+  blocksInitiated Block[] @relation("Blocker")
+  blocksReceived  Block[] @relation("Blocked")
+
+  reportsMade     Report[] @relation("Reporter")
+  reportsReceived Report[] @relation("ReportedUser")
+
+  bansIssued   Ban[] @relation("BannedBy")
+  bansReceived Ban[] @relation("BannedUser")
+}
+
+model Room {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isPublic    Boolean  @default(true)
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User      @relation("RoomCreator", fields: [createdById], references: [id])
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  roomId    String
+  senderId  String
+  createdAt DateTime @default(now())
+
+  room   Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model DirectMessage {
+  id         String   @id @default(cuid())
+  content    String
+  senderId   String
+  receiverId String
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("DirectMessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("DirectMessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+
+  blocker User @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+}
+
+model Report {
+  id             String       @id @default(cuid())
+  reporterId     String
+  reportedUserId String
+  reason         String
+  status         ReportStatus @default(OPEN)
+  createdAt      DateTime     @default(now())
+
+  reporter     User @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUser User @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
+}
+
+model Ban {
+  id         String    @id @default(cuid())
+  userId     String
+  bannedById String
+  reason     String?
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  user     User @relation("BannedUser", fields: [userId], references: [id], onDelete: Cascade)
+  bannedBy User @relation("BannedBy", fields: [bannedById], references: [id], onDelete: Cascade)
+}
