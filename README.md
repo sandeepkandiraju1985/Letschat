@@ -1,0 +1,2 @@
+# Letschat
+Public chat application
