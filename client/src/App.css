@@ -1,184 +1,671 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+:root {
+  --ig-navy: #032f47;
+  --ig-navy-2: #02263a;
+  --ig-cyan: #25d7f4;
+  --ig-yellow: #ffd400;
+  --ig-magenta: #ff0a78;
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+  --page-bg: #eef2f7;
+  --center-bg: #ffffff;
+  --right-bg: #eaf2fb;
+  --right-bg-2: #dfeaf7;
+
+  --text-dark: #111827;
+  --text-soft: #60748d;
+  --line: #d9e3ee;
+  --line-soft: #e7edf4;
+  --white: #ffffff;
+
+  --panel-radius: 14px;
+  --shadow: 0 10px 28px rgba(15, 23, 42, 0.1);
 }
 
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+* {
+  box-sizing: border-box;
 }
 
-#center {
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  background: var(--page-bg);
+  color: var(--text-dark);
+  font-size: 13px;
+}
+
+body {
+  overflow: hidden;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* Layout */
+.irc-layout {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr) 370px;
+  gap: 12px;
+  width: 100%;
+  height: 100vh;
+  padding: 10px;
+  background: var(--page-bg);
+}
+
+/* Shared panels */
+.irc-left,
+.irc-center,
+.irc-right {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--panel-radius);
+  box-shadow: var(--shadow);
+}
+
+/* Left panel */
+.irc-left {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  background:
+    radial-gradient(circle at top left, rgba(37, 215, 244, 0.1), transparent 22%),
+    radial-gradient(circle at top right, rgba(255, 10, 120, 0.06), transparent 18%),
+    linear-gradient(180deg, var(--ig-navy) 0%, var(--ig-navy-2) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 }
 
-#next-steps {
+.irc-left-top {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.irc-tool-row {
   display: flex;
-  border-top: 1px solid var(--border);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.irc-tool-btn {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(2, 27, 44, 0.92);
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.irc-tool-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  border-color: rgba(37, 215, 244, 0.28);
+}
+
+.irc-tool-btn:nth-child(1) {
+  color: var(--ig-cyan);
+}
+
+.irc-tool-btn:nth-child(2) {
+  color: var(--ig-yellow);
+}
+
+.irc-tool-btn:nth-child(3) {
+  color: var(--ig-magenta);
+}
+
+.irc-user-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.irc-avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 21, 35, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--ig-cyan);
+  font-size: 16px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.irc-user-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.irc-muted {
+  color: #c5d2df;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+/* Sections */
+.irc-section {
+  padding: 16px 12px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.irc-section-title {
+  margin-bottom: 10px;
+  color: #c8d6e2;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.irc-channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.irc-channel-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
   text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+.irc-channel-item:hover {
+  border-color: rgba(37, 215, 244, 0.28);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-#next-steps ul {
+.irc-channel-item.active {
+  border-color: var(--ig-cyan);
+  background: rgba(37, 215, 244, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(37, 215, 244, 0.15),
+    0 0 16px rgba(37, 215, 244, 0.12);
+}
+
+.irc-hash {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* DM rows */
+.irc-dm-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 6px 14px 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #eefbff;
+  box-shadow: none;
+}
+
+.irc-dm-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 21, 35, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 17px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.irc-dm-name {
+  flex: 1;
+  min-width: 0;
+  padding-left: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.irc-dm-badge {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ig-magenta);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+/* Center panel */
+.irc-center {
+  display: flex;
+  flex-direction: column;
+  background: var(--center-bg);
+  border: 1px solid #dbe3ed;
+}
+
+.irc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.irc-room-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.1;
+}
+
+.irc-room-subtitle {
+  color: #69809a;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.irc-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 18px 10px;
+  background: #ffffff;
+}
+
+.irc-empty {
+  padding: 18px 6px;
+  color: #90a0b3;
+  font-size: 12px;
+}
+
+.irc-message-list {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.irc-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.irc-message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  font-size: 15px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.irc-message-content-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.irc-message-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 3px;
+  line-height: 1.15;
+}
+
+.irc-message-author {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.irc-message-time {
+  color: #7b8ba1;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.irc-message-text {
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.32;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Composer */
+.irc-composer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.irc-composer-user {
+  height: 46px;
+  min-width: 76px;
+  padding: 0 12px;
+  border: 1px solid #cfdeed;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f1fb;
+  color: #274d78;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: lowercase;
+  flex-shrink: 0;
+}
+
+.irc-input {
+  flex: 1;
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: 1px solid #d7e2ec;
+  border-radius: 14px;
+  background: #fdfefe;
+  color: #111827;
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.irc-input::placeholder {
+  color: #8ea0b4;
+}
+
+.irc-input:focus {
+  border-color: #8fcdf8;
+  box-shadow: 0 0 0 3px rgba(37, 215, 244, 0.12);
+}
+
+.irc-send {
+  height: 46px;
+  min-width: 92px;
+  padding: 0 18px;
+  border: 1px solid #1d73df;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #2f8cff 0%, #1d73df 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.irc-send:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.irc-send:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.irc-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Right panel */
+.irc-right {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--right-bg) 0%, var(--right-bg-2) 100%);
+  border: 1px solid #cfdceb;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.irc-right-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #d4e1ee;
+  background: rgba(255, 255, 255, 0.12);
+  color: #4c6784;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.irc-right-count {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4e3f4;
+  color: #35516f;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.irc-people-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0;
   display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
+  flex-direction: column;
+  gap: 0;
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
+.irc-person-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #d7e3f0;
 }
 
-.ticks {
+.irc-person-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 21, 35, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--ig-cyan);
+  font-size: 16px;
+  font-weight: 800;
   position: relative;
-  width: 100%;
+  flex-shrink: 0;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+.irc-person-avatar::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--ig-cyan);
+  border: 2px solid #e7f0fa;
+}
+
+.irc-person-item:nth-child(2) .irc-person-avatar {
+  color: var(--ig-magenta);
+}
+
+.irc-person-item:nth-child(3) .irc-person-avatar {
+  color: var(--ig-yellow);
+}
+
+.irc-person-item:nth-child(4) .irc-person-avatar {
+  color: var(--ig-cyan);
+}
+
+.irc-person-item:nth-child(5) .irc-person-avatar {
+  color: var(--ig-magenta);
+}
+
+.irc-person-name {
+  min-width: 0;
+  flex: 1;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scrollbars */
+.irc-left,
+.irc-right,
+.irc-people-list,
+.irc-messages {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(151, 191, 226, 0.65) transparent;
+}
+
+.irc-left::-webkit-scrollbar,
+.irc-right::-webkit-scrollbar,
+.irc-people-list::-webkit-scrollbar,
+.irc-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.irc-left::-webkit-scrollbar-track,
+.irc-right::-webkit-scrollbar-track,
+.irc-people-list::-webkit-scrollbar-track,
+.irc-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.irc-left::-webkit-scrollbar-thumb,
+.irc-right::-webkit-scrollbar-thumb,
+.irc-people-list::-webkit-scrollbar-thumb,
+.irc-messages::-webkit-scrollbar-thumb {
+  background: rgba(151, 191, 226, 0.6);
+  border-radius: 999px;
+}
+
+.irc-left::-webkit-scrollbar-thumb:hover,
+.irc-right::-webkit-scrollbar-thumb:hover,
+.irc-people-list::-webkit-scrollbar-thumb:hover,
+.irc-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 173, 214, 0.82);
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .irc-layout {
+    grid-template-columns: 300px minmax(0, 1fr) 320px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .irc-layout {
+    grid-template-columns: 290px minmax(0, 1fr);
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  .irc-right {
+    display: none;
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+}
+
+@media (max-width: 760px) {
+  body {
+    overflow: auto;
+  }
+
+  .irc-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .irc-left,
+  .irc-right {
+    display: none;
+  }
+
+  .irc-center {
+    height: 100vh;
+  }
+
+  .irc-composer-user {
+    display: none;
   }
 }
